@@ -265,10 +265,10 @@ public final class Constants {
   public static final double CANDLE_BRIGHTNESS = 1.0;
 
   // Electric current limits for intake motors
-  public static final int FRONT_INTAKE_CURRENT_LIMIT = 15;
-  public static final int BACK_INTAKE_CURRENT_LIMIT = 25;
-  public static final double FRONT_INTAKE_NOTE_VOLTS = 6.0;
-  public static final double BACK_INTAKE_NOTE_VOLTS = 8.0;
+  public static final int FRONT_INTAKE_CURRENT_LIMIT = 20;
+  public static final int BACK_INTAKE_CURRENT_LIMIT = 20;
+  public static final double FRONT_INTAKE_NOTE_VOLTS = 9.0;
+  public static final double BACK_INTAKE_NOTE_VOLTS = 9.0;
   public static final double AUTO_SPEED = 5; // FIXME: Add real values
 
   public static class Arm {
@@ -283,8 +283,8 @@ public final class Constants {
     public static final double SENSOR_TO_MECHANISM_RATIO = 80.0 / 9.0 * 58.0 / 11.0 / (2 * Math.PI);  // Radian rotations of arm
 
     // Motion Magic Specific Limits
-    public static final double CRUISE_VELOCITY = 12.0;  // Radians per second
-    public static final double ACCELERATION = 24.0;  // Radians per second per second
+    public static final double CRUISE_VELOCITY = 24.0;  // Radians per second
+    public static final double ACCELERATION = 36.0;  // Radians per second per second
     public static final double FEED_FORWARD = 0.0;  // FIXME: for later
     public static final double INITIAL_VARIANCE = Units.degreesToRadians(5);  // Radians
     public static final double AIM_ERROR = Math.toRadians(1.0);  // FIXME: ask gijspice
@@ -295,7 +295,7 @@ public final class Constants {
       public static final double AMP = 2.00;
 
       public static final double UNDERHAND = -Math.PI / 3.5;
-      public static final double OVERHAND = 0.25 * Math.PI;
+      public static final double OVERHAND = 0.25 * Math.PI + 0.125;
     }
   }
 

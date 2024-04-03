@@ -12,6 +12,8 @@ import com.choreo.lib.ChoreoTrajectoryState;
 import com.ctre.phoenix6.SignalLogger;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.Measure;
@@ -26,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.commands.FollowPath;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -106,10 +109,10 @@ public class Robot extends TimedRobot {
       default:
       case Teleop:
         // Make the robot drive in Teleoperated mode by default
-        // this.drive.setDefaultCommand(this.drive.driverControl(
-        //     this.controller.getHID()::getLeftY,
-        //     this.controller.getHID()::getLeftX,
-        //     this.controller.getHID()::getRightX));
+        this.drive.setDefaultCommand(this.drive.driverControl(
+            this.controller.getHID()::getLeftY,
+            this.controller.getHID()::getLeftX,
+            this.controller.getHID()::getRightX));
 
         // Prepare underhand throw
         this.controller.a().onTrue(
@@ -263,51 +266,58 @@ public class Robot extends TimedRobot {
     // this.auto.getAutoName(this.auto.getSelectedAutoId()));
   }
 
-  double autoStartTime;
-
   /**
    * Prepare autonomous mode.
    **/
   @Override
   public void autonomousInit() {
-    autoStartTime = Timer.getFPGATimestamp();
-    Constants.UpdateSettings();
-    CommandScheduler.getInstance().cancelAll();
-    ChoreoTrajectoryState oof = traject.sample(0);
-    this.drive.resetPosition(oof.getPose());
-  }
+    this.drive.resetPosition(new Pose2d(1.369, 5.552, new Rotation2d(0.0)));
 
-  private final ChoreoControlFunction choreoPID = Choreo.choreoSwerveController(
-    new PIDController(10.0, 0.0, 0.2),
-    new PIDController(10.0, 0.0, 0.2),
-    new PIDController(2.0, 0.0, 0.0)
-  );
+    CommandScheduler.getInstance().cancelAll();
+
+    FollowPath hmm = new FollowPath("cheese", drive);
+    CommandScheduler.getInstance().schedule(
+        new SequentialCommandGroup(
+            this.intake.off().alongWith(this.thrower.prepareSpeaker()).alongWith(this.arm.setAngle(0.25 * Math.PI)),
+            new WaitCommand(0.5),
+            this.thrower.launch(),
+            new WaitCommand(0.25),
+            this.arm.setStow().alongWith(this.intake.off()),
+            new WaitCommand(0.25),
+            new ParallelCommandGroup(
+                hmm,
+                new SequentialCommandGroup(
+                    this.intake.intakeNote().alongWith(this.thrower.setIntake()),
+                    new WaitCommand(2.2),
+                    this.intake.off().alongWith(this.thrower.prepareSpeaker()).alongWith(this.arm.setOverhand()),
+                    new WaitCommand(0.6),
+                    this.thrower.launch(), // throw 1
+                    new WaitCommand(0.2),
+                    this.intake.intakeNote().alongWith(this.thrower.setIntake()).alongWith(this.arm.setStow()),
+                    new WaitCommand(1.4),
+                    this.intake.off().alongWith(this.thrower.prepareSpeaker()).alongWith(this.arm.setOverhand()),
+                    new WaitCommand(0.7),
+                    this.thrower.launch(), // throw 2
+                    new WaitCommand(0.4),
+                    this.intake.intakeNote().alongWith(this.thrower.setIntake()).alongWith(this.arm.setStow()),
+                    new WaitCommand(1.7),
+                    this.intake.off().alongWith(this.thrower.prepareSpeaker()).alongWith(this.arm.setAngle(0.25 * Math.PI + 0.1)),
+                    new WaitCommand(0.9),
+                    this.thrower.launch(), // throw 3
+                    new WaitCommand(0.25),
+                    this.thrower.off().alongWith(this.arm.setStow())))));
+  }
 
   @Override
   public void autonomousPeriodic() {
-    if (Timer.getFPGATimestamp() < autoStartTime + traject.getTotalTime()) {
-      ChoreoTrajectoryState oof = traject.sample(Timer.getFPGATimestamp() - autoStartTime);
-      hmm.setRobotPose(oof.getPose());
-      
 
-      ChassisSpeeds maybe = choreoPID.apply(this.drive.getPosition(), oof);
-
-      this.drive.swerveDrive(maybe);
-    } else {
-      this.drive.swerveDrive(new ChassisSpeeds());
-    }
-
-    
   }
-
-  double teleopStartTime;
 
   /**
    * Prepare teleoperated mode.
    **/
   @Override
   public void teleopInit() {
-    teleopStartTime = Timer.getFPGATimestamp();
     Constants.UpdateSettings();
     if (Constants.SYSID_MODE != Constants.SYSID.Teleop)
       SignalLogger.start();
@@ -322,10 +332,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    if (Timer.getFPGATimestamp() < teleopStartTime + traject.getTotalTime()) {
-      ChoreoTrajectoryState oof = traject.sample(Timer.getFPGATimestamp() - teleopStartTime);
-      hmm.setRobotPose(oof.getPose());
-    }
 
   }
 
