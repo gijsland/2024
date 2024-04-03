@@ -124,8 +124,8 @@ public class Auto {
             this.arm.setOverhand().alongWith(this.thrower.prepareSpeaker()),
             new WaitCommand(1),
             this.thrower.launch(),
-            this.thrower.off().alongWith(this.arm.setStow()),
-            this.drive.goStraight(1, 2)
+            this.thrower.off().alongWith(this.arm.setStow())
+            // this.drive.goStraight(1, 2)
           );
         case 1:  // 4-Note
           yield new SequentialCommandGroup(
@@ -157,7 +157,7 @@ public class Auto {
               new WaitCommand(0.2),
               this.thrower.off().alongWith(this.arm.setStow())
             )),
-            this.drive.swerveDrive(() -> 0.0, () -> 0.0, () -> 0.0)
+            this.drive.driverControl(() -> 0.0, () -> 0.0, () -> 0.0)
           );
         case 2:  // 2-Note
           yield new SequentialCommandGroup(
@@ -167,9 +167,9 @@ public class Auto {
             new WaitCommand(0.25),
             this.intake.intakeNote().alongWith(this.arm.setIntake()).alongWith(this.thrower.setIntake()),
             new WaitCommand(1),
-            this.drive.goStraight(1.0, Units.inchesToMeters(50)),
+            // this.drive.goStraight(1.0, Units.inchesToMeters(50)),
             new WaitCommand(0.25),
-            this.drive.goStraight(-1.0, Units.inchesToMeters(60)),
+            // this.drive.goStraight(-1.0, Units.inchesToMeters(60)),
             this.intake.off().alongWith(this.thrower.off()),
             this.arm.setOverhand().alongWith(this.thrower.prepareSpeaker()),
             new WaitCommand(1),

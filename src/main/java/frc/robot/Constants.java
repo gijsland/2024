@@ -142,7 +142,7 @@ public final class Constants {
       * PID value for the drive motor controller
       * @see <a href="https://www.chiefdelphi.com/t/finally-i-understand-pid/450811">Finally I Understand PID! - chiefdelphi</a>
      **/
-    public static final double DRIVE_P = 6.366;
+    public static final double DRIVE_P = 4;//6.366;
 //    public static final double DRIVE_P = 7.5;
     /**
       * PID value for the drive motor controller
@@ -182,7 +182,7 @@ public final class Constants {
       public static double NORMAL_ROT = 1.0;
 
       public static double INTAKE_LIN = 0.8;
-      public static double INTAKE_ROT = 0.8;
+      public static double INTAKE_ROT = 0.6;
 
       public static double AMP_LIN = 0.6;
       public static double AMP_ROT = 0.4;
@@ -190,7 +190,7 @@ public final class Constants {
       public static double OVERHAND_LIN = 0.9;
       public static double OVERHAND_ROT = 0.7;
 
-      public static double UNDERHAND_LIN = 1.0;
+      public static double UNDERHAND_LIN = 0.9;
       public static double UNDERHAND_ROT = 0.7;
     }
 
@@ -286,26 +286,26 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 12.0;  // Radians per second
     public static final double ACCELERATION = 24.0;  // Radians per second per second
     public static final double FEED_FORWARD = 0.0;  // FIXME: for later
-    public static final double INITIAL_VARIANCE = Units.degreesToRadians(3);  // Radians
-    public static final double AIM_ERROR = Math.toRadians(3.0);  // FIXME: ask gijspice
+    public static final double INITIAL_VARIANCE = Units.degreesToRadians(5);  // Radians
+    public static final double AIM_ERROR = Math.toRadians(1.0);  // FIXME: ask gijspice
 
     // Positions in radians
     public static class Positions {
       public static final double INTAKE = -1.69;
       public static final double AMP = 2.00;
 
-      public static final double UNDERHAND = -Math.PI / 4;
+      public static final double UNDERHAND = -Math.PI / 3.5;
       public static final double OVERHAND = 0.25 * Math.PI;
     }
   }
 
   public static class Thrower {
     public static class Launcher {
-      public static final double MAX_CURRENT = 80.0;  // amps
+      public static final double MAX_CURRENT = 60.0;  // amps
       public static final double INTAKE_VOLTAGE = -3.0;  // volts
-      public static final double SPEAKER_VOLTAGE = 12.0;  // volts
-      public static final double TOP_AMP_VOLTAGE = 7.0;  // volts
-      public static final double BOTTOM_AMP_VOLTAGE = 3.0;  // volts
+      public static final double SPEAKER_VOLTAGE = 11.0;  // volts
+      public static final double TOP_AMP_VOLTAGE = 4.0;  // volts
+      public static final double BOTTOM_AMP_VOLTAGE = 2.0;  // volts
       public static final double LAUNCH_SPEED = 1669.756495; //ft/s
     }
 
