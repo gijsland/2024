@@ -301,11 +301,27 @@ public class Robot extends TimedRobot {
                     new WaitCommand(0.4),
                     this.intake.intakeNote().alongWith(this.thrower.setIntake()).alongWith(this.arm.setStow()),
                     new WaitCommand(1.7),
-                    this.intake.off().alongWith(this.thrower.prepareSpeaker()).alongWith(this.arm.setAngle(0.25 * Math.PI + 0.1)),
-                    new WaitCommand(0.9),
+                    this.intake.off().alongWith(this.thrower.prepareSpeaker())
+                        .alongWith(this.arm.setAngle(0.25 * Math.PI + 0.1)),
+                    new WaitCommand(0.7),
                     this.thrower.launch(), // throw 3
-                    new WaitCommand(0.25),
-                    this.thrower.off().alongWith(this.arm.setStow())))));
+                    new WaitCommand(0.2),
+                    this.thrower.off().alongWith(this.arm.setStow()))),
+            new ParallelCommandGroup(
+                new FollowPath("burger", drive),
+                new SequentialCommandGroup(
+                    new WaitCommand(2.0),
+                    this.intake.intakeNote().alongWith(this.thrower.setIntake()),
+                    new WaitCommand(1.5),
+                    this.intake.off().alongWith(this.thrower.off()),
+                    new WaitCommand(1.5),
+                    this.thrower.prepareSpeaker().alongWith(this.arm.setOverhand()),
+                    new WaitCommand(1.0),
+                    this.thrower.launch(),
+                    new WaitCommand(0.2),
+                    this.thrower.off().alongWith(this.arm.setStow())
+
+                ))));
   }
 
   @Override

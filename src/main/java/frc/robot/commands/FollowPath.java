@@ -23,9 +23,9 @@ public class FollowPath extends Command {
         addRequirements(drive);
         this.trajectory = Choreo.getTrajectory(name);
         this.controller = Choreo.choreoSwerveController(
-                new PIDController(10.0, 0.0, 0.2),
-                new PIDController(10.0, 0.0, 0.2),
-                new PIDController(2.0, 0.0, 0.0));
+                new PIDController(12.0, 0.0, 0.6),
+                new PIDController(12.0, 0.0, 0.6),
+                new PIDController(5.0, 0.0, 0.1));
         this.m_timer = new Timer();
     }
 
